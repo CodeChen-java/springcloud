@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -63,5 +64,21 @@ public class PaymentController {
             +"服务端口号："+instance.getPort()+"服务地址："+instance.getUri());
         }
         return this.discoveryClient;
+    }
+
+    @GetMapping("/payment/lb")
+    public String paymentLB() {
+        return serverPort;
+    }
+
+    //测试Openfeign的超时控制
+    @GetMapping("/payment/feign/timeout")
+    public String feignTimeout() {
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return serverPort;
     }
 }
